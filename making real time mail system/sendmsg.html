@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contact Us - Send Message</title>
+    <script type="text/javascript" src="https://cdn.emailjs.com/dist/email.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .contact-form {
+            width: 40%;
+            margin: 100px auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        .contact-form h3 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .input-box {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 15px;
+        }
+        .input-box input, .input-box textarea {
+            padding: 10px;
+            margin-bottom: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .input-box textarea {
+            resize: vertical;
+        }
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+        }
+        .btn:hover {
+            background-color: #45a049;
+        }
+        .toast {
+            visibility: hidden;
+            min-width: 250px;
+            margin-left: -125px;
+            background-color: #4CAF50;
+            color: white;
+            text-align: center;
+            border-radius: 2px;
+            position: fixed;
+            z-index: 1;
+            left: 50%;
+            bottom: 30px;
+            padding: 16px;
+            font-size: 17px;
+        }
+        .toast.show {
+            visibility: visible;
+            /* Add animation */
+            animation: fadein 0.5s, fadeout 0.5s 2.5s;
+        }
+        @keyframes fadein {
+            from {bottom: 0; opacity: 0;}
+            to {bottom: 30px; opacity: 1;}
+        }
+        @keyframes fadeout {
+            from {opacity: 1;}
+            to {opacity: 0;}
+        }
+    </style>
+</head>
+<body>
+
+    <div class="contact-form">
+        <h3>Get in Touch</h3>
+        <form id="contact-form">
+            <div class="input-box">
+                <input type="text" id="name" name="name" placeholder="Your Name" required />
+                <input type="email" id="email" name="email" placeholder="Your Email" required />
+            </div>
+            <div class="input-box">
+                <input type="text" id="subject" name="subject" placeholder="Subject" required />
+                <textarea id="message" name="message" placeholder="Your message" rows="4" required></textarea>
+            </div>
+            <button type="submit" class="btn">Send Message</button>
+        </form>
+    </div>
+
+    <div id="toast" class="toast">Your message has been sent!</div>
+
+    <script>
+        // Initialize EmailJS with your user ID (replace with actual ID)
+        emailjs.init("2mLWsjt8nVgKDm306");  // Replace with your actual User ID from EmailJS
+
+        // Handle form submission
+        document.getElementById("contact-form").addEventListener("submit", function(event) {
+            event.preventDefault();  // Prevent default form submission
+
+            const name = document.getElementById("name").value;
+            const email = document.getElementById("email").value;
+            const subject = document.getElementById("subject").value;
+            const message = document.getElementById("message").value;
+
+            // Send email through EmailJS
+            emailjs.send("service_6owv9sr", "template_7dnhid5", {
+                from_name: name,
+                from_email: email,
+                subject: subject,
+                message: message
+            }).then(function(response) {
+                console.log("Success:", response);
+                showToast();  // Show success toast
+                setTimeout(function() {
+                    window.location.href = 'index.html';  // Redirect to homepage after 3 seconds
+                }, 3000);
+            }, function(error) {
+                console.error("Error:", error);
+                alert("Error sending email: " + error.text);  // Show error message
+            });
+        });
+
+        // Function to show the success toast
+        function showToast() {
+            const toast = document.getElementById("toast");
+            toast.classList.add("show");  // Show the toast
+
+            // Hide the toast after 3 seconds
+            setTimeout(function() {
+                toast.classList.remove("show");
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
